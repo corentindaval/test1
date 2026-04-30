@@ -14,7 +14,7 @@ def gen_nb(valmax):
 def com_ia(question):
     responseia =requests.post(
     "https://api.deepseek.com/v1/chat/completions",
-     headers={"Authorization":"Bearer"+API_KEY,
+     headers={"Authorization":"Bearer "+API_KEY,
          "Content-Type":"application/json"
          },  
     json={
@@ -47,7 +47,7 @@ def jeu():
            if nb_erreur>9:
                  nb_alea=gen_nb(1000)
                  nb_max=nb_alea
-                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+nb_alea)
+                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+str(nb_alea))
 
     nb_cible=gen_nb(nb_max)
     print("maintenant veuillez entrer le nombre de vie(s) que vous voulez (nombre entier uniquement)")
@@ -60,46 +60,45 @@ def jeu():
             if nb_erreur>9:
                  nb_alea=gen_nb(nb_max)
                  nb_vie=nb_alea
-                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+nb_alea)
-          
+                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+str(nb_alea))    
     vie=nb_vie
     partie_en_cour=True
-    print("je pense a un nombre entier entre 0 et "+nb_max+" devine ce nombre") #req
+    print("je pense a un nombre entier entre 0 et "+str(nb_max)+" devine ce nombre") #req
    # nb_prop=int(input("saisiser votre proposition: "))# rep
-    nb_prop=com_ia("je pense a un nombre entier entre 0 et "+nb_max+" devine ce nombre")
+    nb_prop=com_ia("je pense a un nombre entier entre 0 et "+str(nb_max)+" devine ce nombre")
     while partie_en_cour==True:
         if vie>0:
            nb_erreur=0
            if nb_prop=="erreur":
-             print("entrer non valide veuillez proposer un nombre entier entre 0 et"+nb_max+" .")
-             nb_prop=com_ia("entrer non valide veuillez proposer un nombre entier entre 0 et "+nb_max+" .")
+             print("entrer non valide veuillez proposer un nombre entier entre 0 et"+str(nb_max)+" .")
+             nb_prop=com_ia("entrer non valide veuillez proposer un nombre entier entre 0 et "+str(nb_max)+" .")
              nb_erreur+=1
              if nb_erreur>9:
                  nb_alea=gen_nb(nb_max)
                  nb_prop=nb_alea
-                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+nb_alea)
+                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+str(nb_alea))
            if nb_prop<nb_cible:
             nb_erreur=0
             if nb_cible-nb_prop>10:
              vie-=1
-             print("c'est beaucoup + , il vous reste "+vie+"vie(s)")#req
+             print("c'est beaucoup + , il vous reste "+str(vie)+"vie(s)")#req
              # nb_prop=int(input("saisiser votre proposition: "))#req
              nb_prop=com_ia("c'est beaucoup + , il vous reste "+vie+"vie(s)")
             else:
                vie-=1
-               print("c'est un peu + , il vous reste "+vie+"vie(s)")
-               nb_prop=com_ia("c'est un peu + , il vous reste "+vie+"vie(s)")
+               print("c'est un peu + , il vous reste "+str(vie)+"vie(s)")
+               nb_prop=com_ia("c'est un peu + , il vous reste "+str(vie)+"vie(s)")
            if nb_prop>nb_cible:
             nb_erreur=0
             if nb_prop-nb_cible>10:
              vie-=1
-             print("c'est beaucoup - , il vous reste "+vie+"vie(s)")#req
+             print("c'est beaucoup - , il vous reste "+str(vie)+"vie(s)")#req
              # nb_prop=int(input("saisiser votre proposition: "))#rep
-             nb_prop=com_ia("c'est beaucoup - , il vous reste "+vie+"vie(s)")
+             nb_prop=com_ia("c'est beaucoup - , il vous reste "+str(vie)+"vie(s)")
             else:
                 vie-=1
-                print("c'est un peu - , il vous reste "+vie+"vie(s)")
-                nb_prop=com_ia("c'est un peu - , il vous reste "+vie+"vie(s)")
+                print("c'est un peu - , il vous reste "+str(vie)+"vie(s)")
+                nb_prop=com_ia("c'est un peu - , il vous reste "+str(vie)+"vie(s)")
            if nb_prop==nb_cible:
              print("bravo vous avez trouvez le nombre auquel je pensait.")#req
              partie_en_cour=False
@@ -109,7 +108,7 @@ def jeu():
              decText=nv_partie.split(sep)
              for element in decText:
               if element=="oui":
-               nv_partie="true"
+               nvpartie="true"
               if element=="non":
                partie_en_cour==False
                print("au revoir")
@@ -122,9 +121,9 @@ def jeu():
             decText=nv_partie.split(sep)
             for element in decText:
               if element=="oui":
-               nv_partie="true"
+               nvpartie="true"
               if element=="non":
-               partie_en_cour==False
+               partie_en_cour=False
                print("au revoir")
                com_ia("au revoir")
     return nvpartie
