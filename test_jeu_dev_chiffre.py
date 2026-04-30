@@ -47,7 +47,7 @@ def jeu():
            if nb_erreur>9:
                  nb_alea=gen_nb(1000)
                  nb_max=nb_alea
-                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+str(nb_alea))
+                 print(com_ia("vous avez fait trop d'entrer non valide,un nombre aleatoire a donc ete proposer, ce nombre est "+str(nb_alea)))
 
     nb_cible=gen_nb(nb_max)
     print("maintenant veuillez entrer le nombre de vie(s) que vous voulez (nombre entier uniquement)")
@@ -60,7 +60,7 @@ def jeu():
             if nb_erreur>9:
                  nb_alea=gen_nb(nb_max)
                  nb_vie=nb_alea
-                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+str(nb_alea))    
+                 print(com_ia("vous avez fait trop d'entrer non valide,un nombre aleatoire a donc ete proposer, ce nombre est "+str(nb_alea)))    
     vie=nb_vie
     partie_en_cour=True
     print("je pense a un nombre entier entre 0 et "+str(nb_max)+" devine ce nombre") #req
@@ -76,14 +76,14 @@ def jeu():
              if nb_erreur>9:
                  nb_alea=gen_nb(nb_max)
                  nb_prop=nb_alea
-                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+str(nb_alea))
+                 print(com_ia("vous avez fait trop d'entrer non valide,un nombre aleatoire a donc ete proposer, ce nombre est "+str(nb_alea)))
            if nb_prop<nb_cible:
             nb_erreur=0
             if nb_cible-nb_prop>10:
              vie-=1
              print("c'est beaucoup + , il vous reste "+str(vie)+"vie(s)")#req
              # nb_prop=int(input("saisiser votre proposition: "))#req
-             nb_prop=com_ia("c'est beaucoup + , il vous reste "+vie+"vie(s)")
+             nb_prop=com_ia("c'est beaucoup + , il vous reste "+str(vie)+"vie(s)")
             else:
                vie-=1
                print("c'est un peu + , il vous reste "+str(vie)+"vie(s)")
@@ -103,22 +103,22 @@ def jeu():
              print("bravo vous avez trouvez le nombre auquel je pensait.")#req
              partie_en_cour=False
              # nv_partie=input("souhaitez vous faire une nouvelle partie?")#req/rep
-             nv_partie=com_ia("bravo vous avez trouvez le nombre auquel je pensait. souhaitez vous faire une nouvelle partie?")
+             rep_nv_partie=com_ia("bravo vous avez trouvez le nombre auquel je pensait. souhaitez vous faire une nouvelle partie?")
              sep=" "
-             decText=nv_partie.split(sep)
+             decText=rep_nv_partie.split(sep)
              for element in decText:
               if element=="oui":
                nvpartie="true"
               if element=="non":
-               partie_en_cour==False
+               partie_en_cour=False
                print("au revoir")
                com_ia("au revoir")
         else:
             partie_en_cour=False
-            print("vous n'avez plus de vie, c'est perdu ,souhaitez vous réessayer?")
-            nv_partie=com_ia("vous n'avez plus de vie, c'est perdu ,souhaitez vous réessayer?")
+            print("vous n'avez plus de vie, c'est perdu ,souhaitez vous reessayer?")
+            rep_nv_partie=com_ia("vous n'avez plus de vie, c'est perdu ,souhaitez vous reessayer?")
             sep=" "
-            decText=nv_partie.split(sep)
+            decText=rep_nv_partie.split(sep)
             for element in decText:
               if element=="oui":
                nvpartie="true"
