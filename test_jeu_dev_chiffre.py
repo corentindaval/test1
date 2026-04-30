@@ -14,7 +14,7 @@ def gen_nb(valmax):
 def com_ia(question):
     responseia =requests.post(
     "https://api.deepseek.com/v1/chat/completions",
-     headers={"Authorization":"Bearer {API_KEY}",
+     headers={"Authorization":"Bearer"+API_KEY,
          "Content-Type":"application/json"
          },  
     json={
@@ -32,21 +32,36 @@ def extractValue(text):
     decText=text.split(sep)
     for element in decText:
         if element.isnumeric():
-            value=element
+            value=int(element)
     return value
 
 def jeu():
+    nvpartie="false"
     print("bienvenue dans ce jeu de devine le nombre,pour commencer indiquer la valeur maximal que peu prendre le nombre a trouver (nombre entier uniquement) ")
     nb_max=com_ia("bienvenue dans ce jeu de devine le nombre,pour commencer indiquer la valeur maximal que peu prendre le nombre a trouver (nombre entier uniquement) ")
     if nb_max=="erreur":
-       while nb_max=="erreur":
+       nb_erreur=0
+       while nb_max=="erreur" or nb_erreur<10:
            nb_max=com_ia("veuillez entrer une valeur max (entier)")
+           nb_erreur+=1
+           if nb_erreur>9:
+                 nb_alea=gen_nb(1000)
+                 nb_max=nb_alea
+                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+nb_alea)
+
     nb_cible=gen_nb(nb_max)
     print("maintenant veuillez entrer le nombre de vie(s) que vous voulez (nombre entier uniquement)")
     nb_vie=com_ia("maintenant veuillez entrer le nombre de vie(s) que vous voulez (nombre entier uniquement)")
     if nb_vie=="erreur":
-        while nb_vie=="erreur":
+        nb_erreur=0
+        while nb_vie=="erreur" or nb_erreur<10:
             nb_vie=com_ia("veuillez entrer un nombre de vie (entier)")
+            nb_erreur+=1
+            if nb_erreur>9:
+                 nb_alea=gen_nb(nb_max)
+                 nb_vie=nb_alea
+                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+nb_alea)
+          
     vie=nb_vie
     partie_en_cour=True
     print("je pense a un nombre entier entre 0 et "+nb_max+" devine ce nombre") #req
@@ -54,10 +69,17 @@ def jeu():
     nb_prop=com_ia("je pense a un nombre entier entre 0 et "+nb_max+" devine ce nombre")
     while partie_en_cour==True:
         if vie>0:
+           nb_erreur=0
            if nb_prop=="erreur":
-             print("veuillez proposer une valeur")
-             nb_prop=com_ia("veuillez proposer un nombre")
+             print("entrer non valide veuillez proposer un nombre entier entre 0 et"+nb_max+" .")
+             nb_prop=com_ia("entrer non valide veuillez proposer un nombre entier entre 0 et "+nb_max+" .")
+             nb_erreur+=1
+             if nb_erreur>9:
+                 nb_alea=gen_nb(nb_max)
+                 nb_prop=nb_alea
+                 com_ia("vous avez fait trop d'entrer non valide,un nombre aléatoire a donc été proposer, ce nombre est "+nb_alea)
            if nb_prop<nb_cible:
+            nb_erreur=0
             if nb_cible-nb_prop>10:
              vie-=1
              print("c'est beaucoup + , il vous reste "+vie+"vie(s)")#req
@@ -68,6 +90,7 @@ def jeu():
                print("c'est un peu + , il vous reste "+vie+"vie(s)")
                nb_prop=com_ia("c'est un peu + , il vous reste "+vie+"vie(s)")
            if nb_prop>nb_cible:
+            nb_erreur=0
             if nb_prop-nb_cible>10:
              vie-=1
              print("c'est beaucoup - , il vous reste "+vie+"vie(s)")#req
@@ -86,11 +109,11 @@ def jeu():
              decText=nv_partie.split(sep)
              for element in decText:
               if element=="oui":
-               jeu()
-             if element=="non":
-              partie_en_cour==False
-              print("au revoir")
-              com_ia("au revoir")
+               nv_partie="true"
+              if element=="non":
+               partie_en_cour==False
+               print("au revoir")
+               com_ia("au revoir")
         else:
             partie_en_cour=False
             print("vous n'avez plus de vie, c'est perdu ,souhaitez vous réessayer?")
@@ -99,13 +122,16 @@ def jeu():
             decText=nv_partie.split(sep)
             for element in decText:
               if element=="oui":
-               jeu()
+               nv_partie="true"
               if element=="non":
                partie_en_cour==False
                print("au revoir")
                com_ia("au revoir")
+    return nvpartie
 
-jeu()
+partie_en_cour=jeu()
+while partie_en_cour=="true":
+    partie_en_cour=jeu()
 
 
 
